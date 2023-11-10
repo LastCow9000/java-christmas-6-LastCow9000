@@ -38,4 +38,8 @@ public enum Menu {
                 .findFirst()
                 .orElseThrow(() -> new InputException(ExceptionMessage.INVALID_ORDER));
     }
+
+    public static boolean isBeverage(String name) {
+        return findMenuByName(name).type.equals(FoodType.BEVERAGE);
+    }
 }
