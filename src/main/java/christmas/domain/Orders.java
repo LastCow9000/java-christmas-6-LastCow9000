@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 public class Orders {
     private static final String DELIMITER = "-";
+    private static final int LIMIT_COUNT = 20;
 
     private List<Order> orders;
 
@@ -19,7 +20,7 @@ public class Orders {
 
     public void createOrder(List<String> orders) {
         validateDuplicate(orders);
-        //@todo: 개수의 합이 20이하인지 검증
+        validateOverLimit(orders);
         validateOnlyBeverage(orders);
 
         orders.forEach(order -> {
@@ -38,6 +39,18 @@ public class Orders {
         return orders.stream()
                 .map(order -> splitByNameAndCount(order).name())
                 .collect(Collectors.toSet());
+    }
+
+    private void validateOverLimit(List<String> orders) {
+        if (getSumOfCount(orders) > LIMIT_COUNT) {
+            throw new InputException(ExceptionMessage.OVER_LIMIT_ORDER);
+        }
+    }
+
+    private int getSumOfCount(List<String> orders) {
+        return orders.stream()
+                .mapToInt(order -> splitByNameAndCount(order).count())
+                .sum();
     }
 
     private void validateOnlyBeverage(List<String> orders) {

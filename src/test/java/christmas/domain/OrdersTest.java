@@ -67,4 +67,26 @@ class OrdersTest {
                 List.of("제로콜라-1", "타파스-1", "바비큐립-2", "제로콜라-1")
         );
     }
+
+    @DisplayName("20개 초과 주문했으면 예외가 발생해야 한다.")
+    @ParameterizedTest
+    @MethodSource("getOverLimitOrders")
+    void validateOverLimitTest(List<String> orders) {
+        // given
+        Orders newOrders = new Orders(new ArrayList<>());
+
+        // when, then
+        assertThatThrownBy(() -> newOrders.createOrder(orders))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining(ExceptionMessage.OVER_LIMIT_ORDER);
+    }
+
+    static Stream<List<String>> getOverLimitOrders() {
+        return Stream.of(
+                List.of("티본스테이크-21"),
+                List.of("크리스마스파스타-10", "시저샐러드-11"),
+                List.of("제로콜라-5", "초코케이크-5", "바비큐립-5", "해산물파스타-5", "타파스-1")
+        );
+    }
+
 }
