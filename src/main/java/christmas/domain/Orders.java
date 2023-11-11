@@ -54,13 +54,15 @@ public class Orders {
     }
 
     private void validateOnlyBeverage(List<String> orders) {
-        long beverageCount = orders.stream()
-                .filter(isBeverage())
-                .count();
-
-        if (beverageCount == orders.size()) {
+        if (getBeverageCount(orders) == orders.size()) {
             throw new InputException(ExceptionMessage.ONLY_BEVERAGE_ORDER);
         }
+    }
+
+    private long getBeverageCount(List<String> orders) {
+        return orders.stream()
+                .filter(isBeverage())
+                .count();
     }
 
     private Predicate<String> isBeverage() {
