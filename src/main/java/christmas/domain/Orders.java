@@ -12,7 +12,7 @@ public class Orders {
     private static final String DELIMITER = "-";
     private static final int LIMIT_COUNT = 20;
 
-    private List<Order> orders;
+    private final List<Order> orders;
 
     public Orders(List<Order> orders) {
         this.orders = orders;

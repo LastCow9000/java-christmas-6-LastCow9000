@@ -4,8 +4,8 @@ import christmas.exception.ExceptionMessage;
 import christmas.exception.InputException;
 
 public class Order {
-    private Menu menu;
-    private int count;
+    private final Menu menu;
+    private final int count;
 
     private Order(Menu menu, int count) {
         validateCount(count);
