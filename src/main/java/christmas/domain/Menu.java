@@ -28,10 +28,6 @@ public enum Menu {
         this.type = type;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public static Menu findMenuByName(String name) {
         return Arrays.stream(values())
                 .filter(value -> value.name.equals(name))
@@ -41,5 +37,13 @@ public enum Menu {
 
     public static boolean isBeverage(String name) {
         return findMenuByName(name).type.equals(FoodType.BEVERAGE);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getPrice() {
+        return price;
     }
 }

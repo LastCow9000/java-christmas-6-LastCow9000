@@ -1,10 +1,12 @@
 package christmas.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import christmas.exception.ExceptionMessage;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -27,5 +29,18 @@ class OrderTest {
         assertThatThrownBy(() -> Order.of(name, count))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining(ExceptionMessage.INVALID_ORDER);
+    }
+
+    @DisplayName("해당 메뉴의 총 가격을 반환해야 한다.")
+    @Test
+    void getTotalPriceTest() {
+        // given
+        Order order = Order.of("티본스테이크", 10);
+
+        // when
+        int totalPrice = order.getTotalPrice();
+
+        // then
+        assertThat(totalPrice).isEqualTo(550_000);
     }
 }

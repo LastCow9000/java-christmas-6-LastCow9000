@@ -17,6 +17,10 @@ public class Order {
         return new Order(Menu.findMenuByName(name), count);
     }
 
+    public int getTotalPrice() {
+        return menu.getPrice() * count;
+    }
+
     private void validateCount(int count) {
         if (count < 1) {
             throw new InputException(ExceptionMessage.INVALID_ORDER);

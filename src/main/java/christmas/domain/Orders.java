@@ -29,6 +29,12 @@ public class Orders {
         });
     }
 
+    public int calculateTotalBeforeDiscount() {
+        return this.orders.stream()
+                .mapToInt(Order::getTotalPrice)
+                .sum();
+    }
+
     private void validateDuplicate(List<String> orders) {
         if (getDeduplicatedNames(orders).size() != orders.size()) {
             throw new InputException(ExceptionMessage.INVALID_ORDER);

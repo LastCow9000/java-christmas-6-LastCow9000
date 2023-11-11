@@ -1,5 +1,6 @@
 package christmas.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -87,6 +88,26 @@ class OrdersTest {
                 List.of("크리스마스파스타-10", "시저샐러드-11"),
                 List.of("제로콜라-5", "초코케이크-5", "바비큐립-5", "해산물파스타-5", "타파스-1")
         );
+    }
+
+    @DisplayName("할인 전 총주문 금액을 반환해야 한다.")
+    @Test
+    void calculateTotalBeforeDiscountTest() {
+        // given
+        Orders newOrders = new Orders(
+                List.of(
+                        Order.of("티본스테이크", 2),
+                        Order.of("제로콜라", 2),
+                        Order.of("시저샐러드", 1),
+                        Order.of("초코케이크", 1),
+                        Order.of("아이스크림", 1)
+                ));
+
+        // when
+        int totalPrice = newOrders.calculateTotalBeforeDiscount();
+
+        // then
+        assertThat(totalPrice).isEqualTo(144_000);
     }
 
 }
