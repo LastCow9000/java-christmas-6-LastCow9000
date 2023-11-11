@@ -25,7 +25,7 @@ public class Orders {
 
         orders.forEach(order -> {
             OrderParam orderParam = splitByNameAndCount(order);
-            Order.of(orderParam.name(), orderParam.count());
+            this.orders.add(Order.of(orderParam.name(), orderParam.count()));
         });
     }
 
