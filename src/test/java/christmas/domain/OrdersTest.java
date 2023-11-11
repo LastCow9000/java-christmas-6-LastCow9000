@@ -1,6 +1,7 @@
 package christmas.domain;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import christmas.exception.ExceptionMessage;
 import java.util.ArrayList;
@@ -44,5 +45,26 @@ class OrdersTest {
 
         // when, then
         assertThatNoException().isThrownBy(() -> newOrders.createOrder(orders));
+    }
+
+    @DisplayName("중복 메뉴를 주문했을 경우 예외가 발생해야 한다.")
+    @ParameterizedTest
+    @MethodSource("getDuplicatedOrders")
+    void validateDuplicateTest(List<String> orders) {
+        // given
+        Orders newOrders = new Orders(new ArrayList<>());
+
+        // when, then
+        assertThatThrownBy(() -> newOrders.createOrder(orders))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining(ExceptionMessage.INVALID_ORDER);
+    }
+
+    static Stream<List<String>> getDuplicatedOrders() {
+        return Stream.of(
+                List.of("샴페인-1", "샴페인-9"),
+                List.of("아이스크림-2", "해산물파스타-1", "아이스크림-11"),
+                List.of("제로콜라-1", "타파스-1", "바비큐립-2", "제로콜라-1")
+        );
     }
 }

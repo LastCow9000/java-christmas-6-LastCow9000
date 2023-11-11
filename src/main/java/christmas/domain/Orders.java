@@ -4,7 +4,9 @@ import christmas.dto.OrderParam;
 import christmas.exception.ExceptionMessage;
 import christmas.exception.InputException;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Orders {
     private static final String DELIMITER = "-";
@@ -16,7 +18,7 @@ public class Orders {
     }
 
     public void createOrder(List<String> orders) {
-        //@todo: 중복 메뉴입력인지 검증
+        validateDuplicate(orders);
         //@todo: 개수의 합이 20이하인지 검증
         validateOnlyBeverage(orders);
 
@@ -24,6 +26,18 @@ public class Orders {
             OrderParam orderParam = splitByNameAndCount(order);
             Order.of(orderParam.name(), orderParam.count());
         });
+    }
+
+    private void validateDuplicate(List<String> orders) {
+        if (getDeduplicatedNames(orders).size() != orders.size()) {
+            throw new InputException(ExceptionMessage.INVALID_ORDER);
+        }
+    }
+
+    private Set<String> getDeduplicatedNames(List<String> orders) {
+        return orders.stream()
+                .map(order -> splitByNameAndCount(order).name())
+                .collect(Collectors.toSet());
     }
 
     private void validateOnlyBeverage(List<String> orders) {
