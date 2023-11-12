@@ -29,6 +29,14 @@ public class Order {
         return 0;
     }
 
+    public int getCountPerMain() {
+        if (menu.isMain()) {
+            return count;
+        }
+
+        return 0;
+    }
+
     private void validateCount(int count) {
         if (count < 1) {
             throw new InputException(ExceptionMessage.INVALID_ORDER);

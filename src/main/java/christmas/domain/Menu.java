@@ -43,6 +43,10 @@ public enum Menu {
         return this.type.equals(FoodType.DESSERT);
     }
 
+    public boolean isMain() {
+        return this.type.equals(FoodType.MAIN);
+    }
+
     public String getName() {
         return name;
     }
