@@ -10,7 +10,6 @@ import java.util.Locale;
 public class Date {
     private static final int MIN_DATE = 1;
     private static final int MAX_DATE = 31;
-    private static final int MAX_D_DAY_EVENT_DATE = 25;
     private static final int OFFSET = 1;
     private static final int CHRISTMAS = 25;
     private static final String SUNDAY = "일";
@@ -28,7 +27,7 @@ public class Date {
     }
 
     public boolean isBetween1And25days() {
-        return getDay() <= MAX_D_DAY_EVENT_DATE;
+        return getDay() <= CHRISTMAS;
     }
 
     public int daysSince1Day() {
