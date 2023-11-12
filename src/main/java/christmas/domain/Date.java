@@ -7,8 +7,10 @@ import java.time.LocalDate;
 public class Date {
     private static final int MIN_DATE = 1;
     private static final int MAX_DATE = 31;
+    private static final int MAX_D_DAY_EVENT_DATE = 25;
+    private static final int OFFSET = 1;
 
-    private LocalDate date;
+    private final LocalDate date;
 
     private Date(int date) {
         validateRange(date);
@@ -17,6 +19,18 @@ public class Date {
 
     public static Date from(int date) {
         return new Date(date);
+    }
+
+    public boolean isBetween1And25days() {
+        return getDay() <= MAX_D_DAY_EVENT_DATE;
+    }
+
+    public int daysSince1Day() {
+        return getDay() - OFFSET;
+    }
+
+    private int getDay() {
+        return date.getDayOfMonth();
     }
 
     private void validateRange(int date) {
