@@ -46,4 +46,24 @@ class DiscountTest {
         // then
         assertThat(detailEvents).contains("크리스마스 디데이 할인", "-1,400원");
     }
+
+    @DisplayName("증정 이벤트가 적용되어 내역에 나와야 한다.")
+    @Test
+    void giftDiscountTest() {
+        // given
+        Date date = Date.from(30);
+        Discount discount = new Discount(List.of(new GiftStrategy()));
+        Orders orders = new Orders(List.of(
+                Order.of("티본스테이크", 2),
+                Order.of("레드와인", 1)
+        ));
+
+        // when
+        discount.checkEvent(orders, date);
+        String detailEvents = discount.getDetailedEventHistory(date);
+        System.out.println("detailEvents = " + detailEvents);
+
+        // then
+        assertThat(detailEvents).contains("증정 이벤트", "-25,000원");
+    }
 }
