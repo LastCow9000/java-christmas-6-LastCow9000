@@ -3,12 +3,16 @@ package christmas.domain;
 import christmas.exception.ExceptionMessage;
 import christmas.exception.InputException;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 public class Date {
     private static final int MIN_DATE = 1;
     private static final int MAX_DATE = 31;
     private static final int MAX_D_DAY_EVENT_DATE = 25;
     private static final int OFFSET = 1;
+    private static final int CHRISTMAS = 25;
+    private static final String SUNDAY = "일";
 
     private final LocalDate date;
 
@@ -29,8 +33,16 @@ public class Date {
         return getDay() - OFFSET;
     }
 
+    public boolean isSpecialDay() {
+        return getDay() == CHRISTMAS || getDayOfWeek().equals(SUNDAY);
+    }
+
     private int getDay() {
         return date.getDayOfMonth();
+    }
+
+    private String getDayOfWeek() {
+        return date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREA);
     }
 
     private void validateRange(int date) {
