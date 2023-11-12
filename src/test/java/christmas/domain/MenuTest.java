@@ -1,6 +1,6 @@
 package christmas.domain;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import christmas.exception.ExceptionMessage;
 import org.junit.jupiter.api.DisplayName;
