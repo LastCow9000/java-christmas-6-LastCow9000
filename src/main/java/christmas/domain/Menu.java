@@ -39,6 +39,10 @@ public enum Menu {
         return findMenuByName(name).type.equals(FoodType.BEVERAGE);
     }
 
+    public boolean isDessert() {
+        return this.type.equals(FoodType.DESSERT);
+    }
+
     public String getName() {
         return name;
     }

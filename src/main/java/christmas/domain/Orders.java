@@ -35,6 +35,12 @@ public class Orders {
                 .sum();
     }
 
+    public long getCountOfDessert() {
+        return this.orders.stream()
+                .mapToInt(Order::getCountPerDessert)
+                .sum();
+    }
+
     private void validateDuplicate(List<String> orders) {
         if (getDeduplicatedNames(orders).size() != orders.size()) {
             throw new InputException(ExceptionMessage.INVALID_ORDER);

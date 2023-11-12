@@ -21,6 +21,14 @@ public class Order {
         return menu.getPrice() * count;
     }
 
+    public int getCountPerDessert() {
+        if (menu.isDessert()) {
+            return count;
+        }
+
+        return 0;
+    }
+
     private void validateCount(int count) {
         if (count < 1) {
             throw new InputException(ExceptionMessage.INVALID_ORDER);

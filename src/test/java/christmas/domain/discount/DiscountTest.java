@@ -84,4 +84,24 @@ class DiscountTest {
         // then
         assertThat(detailEvents).contains("특별 할인", "-1,000원");
     }
+
+    @DisplayName("평일 할인 이벤트가 적용되어 내역에 나와야 한다.")
+    @Test
+    void weekdayDiscountTest() {
+        // given
+        Date date = Date.from(21);
+        Discount discount = new Discount(List.of(new WeekdayStrategy()));
+        Orders orders = new Orders(List.of(
+                Order.of("초코케이크", 2),
+                Order.of("아이스크림", 3),
+                Order.of("제로콜라", 3)
+        ));
+
+        // when
+        discount.checkEvent(orders, date);
+        String detailEvents = discount.getDetailedEventHistory(date);
+
+        // then
+        assertThat(detailEvents).contains("평일 할인", "-10,115원");
+    }
 }

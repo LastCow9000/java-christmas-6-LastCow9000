@@ -4,6 +4,7 @@ import christmas.exception.ExceptionMessage;
 import christmas.exception.InputException;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.List;
 import java.util.Locale;
 
 public class Date {
@@ -13,6 +14,7 @@ public class Date {
     private static final int OFFSET = 1;
     private static final int CHRISTMAS = 25;
     private static final String SUNDAY = "일";
+    private static final List<String> WEEKDAY = List.of(SUNDAY, "월", "화", "수", "목");
 
     private final LocalDate date;
 
@@ -35,6 +37,10 @@ public class Date {
 
     public boolean isSpecialDay() {
         return getDay() == CHRISTMAS || getDayOfWeek().equals(SUNDAY);
+    }
+
+    public boolean isWeekday() {
+        return WEEKDAY.contains(getDayOfWeek());
     }
 
     private int getDay() {
