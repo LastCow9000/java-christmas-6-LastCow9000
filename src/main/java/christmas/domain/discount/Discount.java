@@ -5,6 +5,7 @@ import christmas.domain.Event;
 import christmas.domain.Orders;
 import java.text.NumberFormat;
 import java.util.Currency;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,10 +21,11 @@ public class Discount {
 
     private final List<DiscountStrategy> strategies;
     private DiscountStrategy discountStrategy;
-    private Map<Event, Integer> checkedEvents;
+    private final Map<Event, Integer> checkedEvents;
 
     public Discount(List<DiscountStrategy> strategies) {
         this.strategies = strategies;
+        this.checkedEvents = new EnumMap<>(Event.class);
     }
 
     //@todo: refactoring
@@ -38,6 +40,7 @@ public class Discount {
 
             List<Event> shouldApplyEvents = discountStrategy.getShouldApplyEvents(orders, date);
             Map<Event, Integer> checkedEvents = shouldApplyEvents.stream()
+                    .filter(event -> !event.equals(Event.NONE))
                     .collect(Collectors.toMap(
                             key -> key,
                             value -> BASE_COUNT,
@@ -50,12 +53,13 @@ public class Discount {
     //@todo: refactoring
     public String getDetailedEventHistory(Date date) {
         StringBuilder sb = new StringBuilder();
+        if (hasOnlyNoneEvent()) {
+            return sb.append(Event.NONE.getName())
+                    .append(LINE_FEED)
+                    .toString();
+        }
+
         checkedEvents.forEach((event, count) -> {
-            if (event.equals(Event.NONE)) {
-                sb.append(event.getName())
-                        .append(LINE_FEED);
-                return;
-            }
             int discountAmount = getDiscountAmount(date, event, count);
 
             sb.append(event.getName())
@@ -70,6 +74,12 @@ public class Discount {
 
     private boolean isBelowThreshold(Orders orders) {
         return orders.calculateTotalBeforeDiscount() < THRESHOLD;
+    }
+
+    private boolean hasOnlyNoneEvent() {
+        return checkedEvents.size() == 1 && checkedEvents.entrySet()
+                .stream()
+                .anyMatch(entry -> entry.getKey().equals(Event.NONE));
     }
 
     private int getDiscountAmount(Date date, Event event, Integer count) {
@@ -89,6 +99,6 @@ public class Discount {
     }
 
     private void setCheckedEvents(Map<Event, Integer> checkedEvents) {
-        this.checkedEvents = checkedEvents;
+        this.checkedEvents.putAll(checkedEvents);
     }
 }
