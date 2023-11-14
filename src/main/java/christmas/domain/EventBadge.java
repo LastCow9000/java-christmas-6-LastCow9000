@@ -20,7 +20,7 @@ public enum EventBadge {
     public static EventBadge getEventBadge(int amount) {
         return Arrays.stream(values())
                 .sorted(descendOrderByPrice())
-                .filter(badge -> badge.price <= amount)
+                .filter(badge -> badge.price <= Math.abs(amount))
                 .findFirst()
                 .orElse(NONE);
     }
@@ -28,7 +28,7 @@ public enum EventBadge {
     public String getName() {
         return name;
     }
-    
+
     private static Comparator<EventBadge> descendOrderByPrice() {
         return (o1, o2) -> o2.price - o1.price;
     }
