@@ -8,6 +8,7 @@ public class OutputView {
     private static final String GIFT_MENU = "<증정 메뉴>";
     private static final String BENEFIT_HISTORY = "<혜택 내역>";
     private static final String TOTAL_BENEFIT = "<총혜택 금액>";
+    private static final String DISCOUNTED_TOTAL = "<할인 후 예상 결제 금액>";
 
     public static void printGreeting() {
         print(GREETING);
@@ -39,6 +40,11 @@ public class OutputView {
 
     public static void printTotalBenefit(String amount) {
         print(TOTAL_BENEFIT);
+        print(amount);
+    }
+
+    public static void printDiscountedTotal(String amount) {
+        print(DISCOUNTED_TOTAL);
         print(amount);
     }
 
