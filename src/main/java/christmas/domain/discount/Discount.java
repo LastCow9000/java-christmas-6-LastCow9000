@@ -22,16 +22,19 @@ public class Discount {
 
 
     private final List<DiscountStrategy> strategies;
+    private final Date date;
     private DiscountStrategy discountStrategy;
     private final Map<Event, Integer> checkedEvents;
 
-    public Discount(List<DiscountStrategy> strategies) {
+    public Discount(List<DiscountStrategy> strategies, Date date) {
         this.strategies = strategies;
+        this.date = date;
+        this.discountStrategy = null;
         this.checkedEvents = new EnumMap<>(Event.class);
     }
 
     //@todo: refactoring
-    public void checkEvent(Orders orders, Date date) {
+    public void checkEvent(Orders orders) {
         if (isBelowThreshold(orders)) {
             setCheckedEvents(Map.of(Event.NONE, BASE_COUNT));
             return;
@@ -53,7 +56,7 @@ public class Discount {
     }
 
     //@todo: refactoring
-    public String getDetailedEventHistory(Date date) {
+    public String getDetailedEventHistory() {
         StringBuilder sb = new StringBuilder();
         if (hasOnlyNoneEvent()) {
             return sb.append(Event.NONE.getName())
@@ -62,7 +65,7 @@ public class Discount {
         }
 
         checkedEvents.forEach((event, count) -> {
-            int discountAmount = getDiscountAmount(date, event, count);
+            int discountAmount = getDiscountAmount(event, count);
 
             sb.append(event.getName())
                     .append(DELIMITER)
@@ -73,7 +76,7 @@ public class Discount {
         return sb.toString();
     }
 
-    public int getTotalBenefitAmount(Date date) {
+    public int getTotalBenefitAmount() {
         return checkedEvents.entrySet()
                 .stream()
                 .mapToInt(entry -> entry.getKey().calculateTotalAmount(entry.getValue(), date))
@@ -81,8 +84,8 @@ public class Discount {
                 * MINUS_BASE;
     }
 
-    public int getTotalDiscountAmount(Date date) {
-        return getTotalBenefitAmount(date) + getExcludedAmount();
+    public int getTotalDiscountAmount() {
+        return getTotalBenefitAmount() + getExcludedAmount();
     }
 
     public String getStringGiftMenu() {
@@ -122,7 +125,7 @@ public class Discount {
                 .anyMatch(entry -> entry.getKey().equals(Event.NONE));
     }
 
-    private int getDiscountAmount(Date date, Event event, Integer count) {
+    private int getDiscountAmount(Event event, Integer count) {
         return MINUS_BASE * event.calculateTotalAmount(count, date);
     }
 

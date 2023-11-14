@@ -18,14 +18,14 @@ class DiscountTest {
     void noDiscountTest() {
         // given
         Date date = Date.from(25);
-        Discount discount = new Discount(List.of(new DDayStrategy()));
+        Discount discount = new Discount(List.of(new DDayStrategy()), date);
         Orders orders = new Orders(List.of(
                 Order.of("양송이수프", 1)
         ));
 
         // when
-        discount.checkEvent(orders, date);
-        String detailEvents = discount.getDetailedEventHistory(date);
+        discount.checkEvent(orders);
+        String detailEvents = discount.getDetailedEventHistory();
 
         // then
         assertThat(detailEvents).contains("없음");
@@ -36,15 +36,15 @@ class DiscountTest {
     void christmasDDayDiscountTest() {
         // given
         Date date = Date.from(5);
-        Discount discount = new Discount(List.of(new DDayStrategy()));
+        Discount discount = new Discount(List.of(new DDayStrategy()), date);
         Orders orders = new Orders(List.of(
                 Order.of("티본스테이크", 2),
                 Order.of("레드와인", 1)
         ));
 
         // when
-        discount.checkEvent(orders, date);
-        String detailEvents = discount.getDetailedEventHistory(date);
+        discount.checkEvent(orders);
+        String detailEvents = discount.getDetailedEventHistory();
 
         // then
         assertThat(detailEvents).contains("크리스마스 디데이 할인", "-1,400원");
@@ -55,15 +55,15 @@ class DiscountTest {
     void giftDiscountTest() {
         // given
         Date date = Date.from(30);
-        Discount discount = new Discount(List.of(new GiftStrategy()));
+        Discount discount = new Discount(List.of(new GiftStrategy()), date);
         Orders orders = new Orders(List.of(
                 Order.of("티본스테이크", 2),
                 Order.of("레드와인", 1)
         ));
 
         // when
-        discount.checkEvent(orders, date);
-        String detailEvents = discount.getDetailedEventHistory(date);
+        discount.checkEvent(orders);
+        String detailEvents = discount.getDetailedEventHistory();
         System.out.println("detailEvents = " + detailEvents);
 
         // then
@@ -75,14 +75,14 @@ class DiscountTest {
     void specialDiscountTest() {
         // given
         Date date = Date.from(25);
-        Discount discount = new Discount(List.of(new SpecialStrategy()));
+        Discount discount = new Discount(List.of(new SpecialStrategy()), date);
         Orders orders = new Orders(List.of(
                 Order.of("크리스마스파스타", 1)
         ));
 
         // when
-        discount.checkEvent(orders, date);
-        String detailEvents = discount.getDetailedEventHistory(date);
+        discount.checkEvent(orders);
+        String detailEvents = discount.getDetailedEventHistory();
 
         // then
         assertThat(detailEvents).contains("특별 할인", "-1,000원");
@@ -93,7 +93,7 @@ class DiscountTest {
     void weekdayDiscountTest() {
         // given
         Date date = Date.from(21);
-        Discount discount = new Discount(List.of(new WeekdayStrategy()));
+        Discount discount = new Discount(List.of(new WeekdayStrategy()), date);
         Orders orders = new Orders(List.of(
                 Order.of("초코케이크", 2),
                 Order.of("아이스크림", 3),
@@ -101,8 +101,8 @@ class DiscountTest {
         ));
 
         // when
-        discount.checkEvent(orders, date);
-        String detailEvents = discount.getDetailedEventHistory(date);
+        discount.checkEvent(orders);
+        String detailEvents = discount.getDetailedEventHistory();
 
         // then
         assertThat(detailEvents).contains("평일 할인", "-10,115원");
@@ -113,7 +113,7 @@ class DiscountTest {
     void weekendDiscountTest() {
         // given
         Date date = Date.from(22);
-        Discount discount = new Discount(List.of(new WeekendStrategy()));
+        Discount discount = new Discount(List.of(new WeekendStrategy()), date);
         Orders orders = new Orders(List.of(
                 Order.of("티본스테이크", 1),
                 Order.of("아이스크림", 3),
@@ -123,8 +123,8 @@ class DiscountTest {
         ));
 
         // when
-        discount.checkEvent(orders, date);
-        String detailEvents = discount.getDetailedEventHistory(date);
+        discount.checkEvent(orders);
+        String detailEvents = discount.getDetailedEventHistory();
 
         // then
         assertThat(detailEvents).contains("주말 할인", "-16,184원");
@@ -142,11 +142,11 @@ class DiscountTest {
                 new SpecialStrategy(),
                 new WeekdayStrategy(),
                 new WeekendStrategy()
-        ));
+        ), date);
 
         // when
-        discount.checkEvent(eventDto.orders(), date);
-        String detailEvents = discount.getDetailedEventHistory(date);
+        discount.checkEvent(eventDto.orders());
+        String detailEvents = discount.getDetailedEventHistory();
         System.out.println(detailEvents);
         // then
         assertThat(detailEvents).contains(eventDto.expected());
@@ -207,7 +207,7 @@ class DiscountTest {
                 new SpecialStrategy(),
                 new WeekdayStrategy(),
                 new WeekendStrategy()
-        ));
+        ), date);
         Orders orders = new Orders(List.of(
                 Order.of("해산물파스타", 2),
                 Order.of("바비큐립", 1),
@@ -217,8 +217,8 @@ class DiscountTest {
         ));
 
         // when
-        discount.checkEvent(orders, date);
-        int totalBenefitAmount = discount.getTotalBenefitAmount(date);
+        discount.checkEvent(orders);
+        int totalBenefitAmount = discount.getTotalBenefitAmount();
 
         // then
         assertThat(totalBenefitAmount).isEqualTo(-35469);
@@ -235,7 +235,7 @@ class DiscountTest {
                 new SpecialStrategy(),
                 new WeekdayStrategy(),
                 new WeekendStrategy()
-        ));
+        ), date);
         Orders orders = new Orders(List.of(
                 Order.of("해산물파스타", 2),
                 Order.of("바비큐립", 1),
@@ -245,8 +245,8 @@ class DiscountTest {
         ));
 
         // when
-        discount.checkEvent(orders, date);
-        int totalDiscountAmount = discount.getTotalDiscountAmount(date);
+        discount.checkEvent(orders);
+        int totalDiscountAmount = discount.getTotalDiscountAmount();
 
         // then
         assertThat(totalDiscountAmount).isEqualTo(-10469);
