@@ -4,8 +4,7 @@ import christmas.domain.Date;
 import christmas.domain.Event;
 import christmas.domain.Menu;
 import christmas.domain.Orders;
-import java.text.NumberFormat;
-import java.util.Currency;
+import christmas.util.CurrencyUtil;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +16,6 @@ public class Discount {
     private static final int MINUS_BASE = -1;
     private static final int ZERO = 0;
     private static final String DELIMITER = ": ";
-    private static final String CURRENCY_CODE = "KRW";
-    private static final String WON = "원";
     private static final String LINE_FEED = "\n";
     private static final String COUNT = "개";
     private static final String BLANK = " ";
@@ -69,8 +66,7 @@ public class Discount {
 
             sb.append(event.getName())
                     .append(DELIMITER)
-                    .append(formatCurrency(discountAmount))
-                    .append(WON)
+                    .append(CurrencyUtil.formatToKor(discountAmount))
                     .append(LINE_FEED);
         });
 
@@ -128,14 +124,6 @@ public class Discount {
 
     private int getDiscountAmount(Date date, Event event, Integer count) {
         return MINUS_BASE * event.calculateTotalAmount(count, date);
-    }
-
-    private String formatCurrency(int amount) {
-        NumberFormat currencyInstance = NumberFormat.getCurrencyInstance();
-        Currency currency = Currency.getInstance(CURRENCY_CODE);
-        String withCurrencySymbol = currencyInstance.format(amount);
-
-        return withCurrencySymbol.replace(currency.getSymbol(), "");
     }
 
     private void setDiscountStrategy(DiscountStrategy strategy) {
