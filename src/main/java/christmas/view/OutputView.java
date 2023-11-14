@@ -6,6 +6,7 @@ public class OutputView {
     private static final String ORDERED_MENU = "<주문 메뉴>";
     private static final String TOTAL_BEFORE_DISCOUNT = "<할인 전 총주문 금액>";
     private static final String GIFT_MENU = "<증정 메뉴>";
+    private static final String BENEFIT_HISTORY = "<혜택 내역>";
 
     public static void printGreeting() {
         print(GREETING);
@@ -28,6 +29,11 @@ public class OutputView {
     public static void printGiftMenu(String menu) {
         print(GIFT_MENU);
         print(menu);
+    }
+
+    public static void printBenefitHistory(String history) {
+        print(BENEFIT_HISTORY);
+        print(history);
     }
 
     private static void print(String input) {
