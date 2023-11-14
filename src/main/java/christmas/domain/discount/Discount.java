@@ -72,6 +72,14 @@ public class Discount {
         return sb.toString();
     }
 
+    public int getTotalBenefitAmount(Date date) {
+        return checkedEvents.entrySet()
+                .stream()
+                .mapToInt(entry -> entry.getKey().calculateTotalAmount(entry.getValue(), date))
+                .sum()
+                * MINUS_BASE;
+    }
+
     private boolean isBelowThreshold(Orders orders) {
         return orders.calculateTotalBeforeDiscount() < THRESHOLD;
     }
