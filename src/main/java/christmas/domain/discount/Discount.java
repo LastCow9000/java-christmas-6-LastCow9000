@@ -2,6 +2,7 @@ package christmas.domain.discount;
 
 import christmas.domain.Date;
 import christmas.domain.Event;
+import christmas.domain.Menu;
 import christmas.domain.Orders;
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -19,6 +20,9 @@ public class Discount {
     private static final String CURRENCY_CODE = "KRW";
     private static final String WON = "원";
     private static final String LINE_FEED = "\n";
+    private static final String COUNT = "개";
+    private static final String BLANK = " ";
+
 
     private final List<DiscountStrategy> strategies;
     private DiscountStrategy discountStrategy;
@@ -85,13 +89,31 @@ public class Discount {
         return getTotalBenefitAmount(date) + getExcludedAmount();
     }
 
+    public String getStringGiftMenu() {
+        Event event = Event.GIFT;
+        if (hasEvent(event)) {
+            return new StringBuilder()
+                    .append(Menu.CHAMPAGNE.getName())
+                    .append(BLANK)
+                    .append(BASE_COUNT)
+                    .append(COUNT)
+                    .toString();
+        }
+
+        return Event.NONE.getName();
+    }
+
     private int getExcludedAmount() {
         Event event = Event.GIFT;
-        if (checkedEvents.containsKey(event)) {
+        if (hasEvent(event)) {
             return event.getAmount();
         }
 
         return ZERO;
+    }
+
+    private boolean hasEvent(Event event) {
+        return checkedEvents.containsKey(event);
     }
 
     private boolean isBelowThreshold(Orders orders) {
