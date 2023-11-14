@@ -223,6 +223,34 @@ class DiscountTest {
         // then
         assertThat(totalBenefitAmount).isEqualTo(-35469);
     }
+
+    @DisplayName("할인 금액을 반환해야 한다.")
+    @Test
+    void getTotalDiscountAmountTest() {
+        // given
+        Date date = Date.from(25);
+        Discount discount = new Discount(List.of(
+                new DDayStrategy(),
+                new GiftStrategy(),
+                new SpecialStrategy(),
+                new WeekdayStrategy(),
+                new WeekendStrategy()
+        ));
+        Orders orders = new Orders(List.of(
+                Order.of("해산물파스타", 2),
+                Order.of("바비큐립", 1),
+                Order.of("샴페인", 2),
+                Order.of("타파스", 1),
+                Order.of("초코케이크", 3)
+        ));
+
+        // when
+        discount.checkEvent(orders, date);
+        int totalDiscountAmount = discount.getTotalDiscountAmount(date);
+
+        // then
+        assertThat(totalDiscountAmount).isEqualTo(-10469);
+    }
 }
 
 record EventDto(int date, Orders orders, String... expected) {

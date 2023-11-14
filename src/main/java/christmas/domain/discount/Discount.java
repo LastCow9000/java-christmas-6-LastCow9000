@@ -14,6 +14,7 @@ public class Discount {
     private static final int THRESHOLD = 10_000;
     private static final int BASE_COUNT = 1;
     private static final int MINUS_BASE = -1;
+    private static final int ZERO = 0;
     private static final String DELIMITER = ": ";
     private static final String CURRENCY_CODE = "KRW";
     private static final String WON = "원";
@@ -78,6 +79,19 @@ public class Discount {
                 .mapToInt(entry -> entry.getKey().calculateTotalAmount(entry.getValue(), date))
                 .sum()
                 * MINUS_BASE;
+    }
+
+    public int getTotalDiscountAmount(Date date) {
+        return getTotalBenefitAmount(date) + getExcludedAmount();
+    }
+
+    private int getExcludedAmount() {
+        Event event = Event.GIFT;
+        if (checkedEvents.containsKey(event)) {
+            return event.getAmount();
+        }
+
+        return ZERO;
     }
 
     private boolean isBelowThreshold(Orders orders) {

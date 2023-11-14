@@ -29,9 +29,13 @@ public enum Event {
 
         return count * amount;
     }
-    
+
     public String getName() {
         return name;
+    }
+
+    public int getAmount() {
+        return amount;
     }
 
     private boolean isOneTimeEvent() {
