@@ -17,6 +17,7 @@ public class OutputView {
 
     public static void printPreviewTitle(int date) {
         print(String.format(PREVIEW_TITLE, date));
+        printLineFeed();
     }
 
     public static void printOrderedMenu(String orders) {
@@ -27,11 +28,13 @@ public class OutputView {
     public static void printTotalBeforeDiscount(String amount) {
         print(TOTAL_BEFORE_DISCOUNT);
         print(amount);
+        printLineFeed();
     }
 
     public static void printGiftMenu(String menu) {
         print(GIFT_MENU);
         print(menu);
+        printLineFeed();
     }
 
     public static void printBenefitHistory(String history) {
@@ -42,11 +45,13 @@ public class OutputView {
     public static void printTotalBenefit(String amount) {
         print(TOTAL_BENEFIT);
         print(amount);
+        printLineFeed();
     }
 
     public static void printDiscountedTotal(String amount) {
         print(DISCOUNTED_TOTAL);
         print(amount);
+        printLineFeed();
     }
 
     public static void printEventBadge(String badge) {
@@ -56,5 +61,9 @@ public class OutputView {
 
     private static void print(String input) {
         System.out.println(input);
+    }
+
+    private static void printLineFeed() {
+        System.out.println();
     }
 }
