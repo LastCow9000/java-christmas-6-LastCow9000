@@ -42,7 +42,7 @@ public class Date {
         return WEEKDAY.contains(getDayOfWeek());
     }
 
-    private int getDay() {
+    public int getDay() {
         return date.getDayOfMonth();
     }
 
