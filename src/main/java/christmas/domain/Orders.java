@@ -5,12 +5,14 @@ import christmas.exception.ExceptionMessage;
 import christmas.exception.InputException;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Orders {
     private static final String DELIMITER = "-";
     private static final int LIMIT_COUNT = 20;
+    private static final String INIT_VALUE = "";
 
     private final List<Order> orders;
 
@@ -45,6 +47,15 @@ public class Orders {
         return this.orders.stream()
                 .mapToInt(Order::getCountPerMain)
                 .sum();
+    }
+
+    public String getStringOrders() {
+        return orders.stream()
+                .reduce(INIT_VALUE, getStringOrderBiFunction(), String::join);
+    }
+
+    private BiFunction<String, Order, String> getStringOrderBiFunction() {
+        return (String result, Order order) -> result + order.getStringMenuAndCount();
     }
 
     private void validateDuplicate(List<String> orders) {

@@ -4,6 +4,10 @@ import christmas.exception.ExceptionMessage;
 import christmas.exception.InputException;
 
 public class Order {
+    private static final String BLANK = " ";
+    private static final String COUNT = "개";
+    private static final String LINE_FEED = "\n";
+
     private final Menu menu;
     private final int count;
 
@@ -35,6 +39,16 @@ public class Order {
         }
 
         return 0;
+    }
+
+    public String getStringMenuAndCount() {
+        return new StringBuilder()
+                .append(menu.getName())
+                .append(BLANK)
+                .append(count)
+                .append(COUNT)
+                .append(LINE_FEED)
+                .toString();
     }
 
     private void validateCount(int count) {
