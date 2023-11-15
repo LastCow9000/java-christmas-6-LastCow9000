@@ -4,7 +4,7 @@ import christmas.domain.Date;
 import christmas.domain.Event;
 import christmas.domain.Orders;
 import java.util.List;
-import java.util.stream.LongStream;
+import java.util.stream.IntStream;
 
 public class WeekendStrategy implements DiscountStrategy {
 
@@ -14,7 +14,8 @@ public class WeekendStrategy implements DiscountStrategy {
             return List.of(Event.NONE);
         }
 
-        return LongStream.range(0, orders.getCountOfMain())
+        return IntStream
+                .range(0, orders.getCountOfMain())
                 .mapToObj(index -> Event.WEEKEND_DISCOUNT)
                 .toList();
     }

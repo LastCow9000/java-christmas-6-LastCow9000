@@ -37,13 +37,13 @@ public class Orders {
                 .sum();
     }
 
-    public long getCountOfDessert() {
+    public int getCountOfDessert() {
         return this.orders.stream()
                 .mapToInt(Order::getCountPerDessert)
                 .sum();
     }
 
-    public long getCountOfMain() {
+    public int getCountOfMain() {
         return this.orders.stream()
                 .mapToInt(Order::getCountPerMain)
                 .sum();
