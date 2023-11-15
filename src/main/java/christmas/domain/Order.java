@@ -1,16 +1,15 @@
 package christmas.domain;
 
+import static christmas.Constants.BASE_COUNT;
+import static christmas.Constants.BLANK;
+import static christmas.Constants.COUNT;
+import static christmas.Constants.LINE_FEED;
+import static christmas.Constants.NONE;
+
 import christmas.exception.ExceptionMessage;
 import christmas.exception.InputException;
 
 public class Order {
-
-    private static final int MIN_COUNT = 1;
-    private static final int NONE = 0;
-    private static final String BLANK = " ";
-    private static final String COUNT = "개";
-    private static final String LINE_FEED = "\n";
-
     private final Menu menu;
     private final int count;
 
@@ -55,7 +54,7 @@ public class Order {
     }
 
     private void validateCount(int count) {
-        if (count < MIN_COUNT) {
+        if (count < BASE_COUNT) {
             throw new InputException(ExceptionMessage.INVALID_ORDER);
         }
     }

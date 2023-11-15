@@ -1,5 +1,11 @@
 package christmas.domain.discount;
 
+import static christmas.Constants.BASE_COUNT;
+import static christmas.Constants.BLANK;
+import static christmas.Constants.COUNT;
+import static christmas.Constants.LINE_FEED;
+import static christmas.Constants.NONE;
+
 import christmas.domain.Date;
 import christmas.domain.Event;
 import christmas.domain.Menu;
@@ -12,15 +18,9 @@ import java.util.stream.Collectors;
 
 public class Discount {
     private static final int THRESHOLD = 10_000;
-    private static final int BASE_COUNT = 1;
     private static final int MINUS_BASE = -1;
-    private static final int ZERO = 0;
     private static final String DELIMITER = ": ";
-    private static final String LINE_FEED = "\n";
-    private static final String COUNT = "개";
-    private static final String BLANK = " ";
-
-
+    
     private final List<DiscountStrategy> strategies;
     private final Date date;
     private DiscountStrategy discountStrategy;
@@ -108,7 +108,7 @@ public class Discount {
             return event.getAmount();
         }
 
-        return ZERO;
+        return NONE;
     }
 
     private boolean hasEvent(Event event) {
