@@ -24,36 +24,21 @@ public class Discount {
 
     private final List<DiscountStrategy> strategies;
     private final Date date;
-    private DiscountStrategy discountStrategy;
-    private final Map<Event, Integer> checkedEvents;
+    private final Map<Event, Integer> appliedEvents;
 
     public Discount(List<DiscountStrategy> strategies, Date date) {
         this.strategies = strategies;
         this.date = date;
-        this.discountStrategy = null;
-        this.checkedEvents = new EnumMap<>(Event.class);
+        this.appliedEvents = new EnumMap<>(Event.class);
     }
 
-    //@todo: refactoring
     public void checkEvent(Orders orders) {
         if (isBelowAmountForDiscount(orders)) {
-            setCheckedEvents(Map.of(Event.NONE, BASE_COUNT));
+            setAppliedEvents(Map.of(Event.NONE, BASE_COUNT));
             return;
         }
 
-        strategies.forEach(strategy -> {
-            setDiscountStrategy(strategy);
-
-            List<Event> shouldApplyEvents = discountStrategy.getShouldApplyEvents(orders, date);
-            Map<Event, Integer> checkedEvents = shouldApplyEvents.stream()
-                    .filter(event -> !event.equals(Event.NONE))
-                    .collect(Collectors.toMap(
-                            key -> key,
-                            value -> BASE_COUNT,
-                            Integer::sum
-                    ));
-            setCheckedEvents(checkedEvents);
-        });
+        applyEvents(orders);
     }
 
     public String getDetailedEventHistory() {
@@ -64,27 +49,8 @@ public class Discount {
         return createEventHistory();
     }
 
-    private String createEventHistory() {
-        return checkedEvents.entrySet()
-                .stream()
-                .map(this::getStringHistory)
-                .collect(Collectors.joining());
-    }
-
-    private StringBuilder getStringHistory(Entry<Event, Integer> entry) {
-        Event event = entry.getKey();
-        int count = entry.getValue();
-        String amount = CurrencyUtil.formatToKor(getDiscountAmount(event, count));
-
-        return new StringBuilder()
-                .append(event.getName())
-                .append(DELIMITER)
-                .append(amount)
-                .append(LINE_FEED);
-    }
-
     public int getTotalBenefitAmount() {
-        return checkedEvents.entrySet()
+        return appliedEvents.entrySet()
                 .stream()
                 .mapToInt(entry -> entry.getKey().calculateTotalAmount(entry.getValue(), date))
                 .sum()
@@ -109,6 +75,38 @@ public class Discount {
         return Event.NONE.getName();
     }
 
+    private String createEventHistory() {
+        return appliedEvents.entrySet()
+                .stream()
+                .map(this::getStringHistory)
+                .collect(Collectors.joining());
+    }
+
+    private StringBuilder getStringHistory(Entry<Event, Integer> entry) {
+        Event event = entry.getKey();
+        int count = entry.getValue();
+        String amount = CurrencyUtil.formatToKor(getDiscountAmount(event, count));
+
+        return new StringBuilder()
+                .append(event.getName())
+                .append(DELIMITER)
+                .append(amount)
+                .append(LINE_FEED);
+    }
+
+    private void applyEvents(Orders orders) {
+        strategies.forEach(strategy -> {
+            List<Event> shouldApplyEvents = strategy.getShouldApplyEvents(orders, date);
+            setAppliedEvents(apply(shouldApplyEvents));
+        });
+    }
+
+    private Map<Event, Integer> apply(List<Event> shouldApplyEvents) {
+        return shouldApplyEvents.stream()
+                .filter(event -> !event.equals(Event.NONE))
+                .collect(Collectors.toMap(key -> key, value -> BASE_COUNT, Integer::sum));
+    }
+
     private int getExcludedAmount() {
         Event event = Event.GIFT;
         if (hasEvent(event)) {
@@ -119,7 +117,7 @@ public class Discount {
     }
 
     private boolean hasEvent(Event event) {
-        return checkedEvents.containsKey(event);
+        return appliedEvents.containsKey(event);
     }
 
     private boolean isBelowAmountForDiscount(Orders orders) {
@@ -127,8 +125,8 @@ public class Discount {
     }
 
     private boolean hasOnlyNoneEvent() {
-        return checkedEvents.size() == 1 &&
-                checkedEvents.entrySet()
+        return appliedEvents.size() == 1 &&
+                appliedEvents.entrySet()
                         .stream()
                         .anyMatch(entry -> entry.getKey().equals(Event.NONE));
     }
@@ -137,11 +135,7 @@ public class Discount {
         return MINUS_BASE * event.calculateTotalAmount(count, date);
     }
 
-    private void setDiscountStrategy(DiscountStrategy strategy) {
-        this.discountStrategy = strategy;
-    }
-
-    private void setCheckedEvents(Map<Event, Integer> checkedEvents) {
-        this.checkedEvents.putAll(checkedEvents);
+    private void setAppliedEvents(Map<Event, Integer> appliedEvents) {
+        this.appliedEvents.putAll(appliedEvents);
     }
 }
