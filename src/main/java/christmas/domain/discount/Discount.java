@@ -14,6 +14,7 @@ import christmas.util.CurrencyUtil;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class Discount {
@@ -55,25 +56,31 @@ public class Discount {
         });
     }
 
-    //@todo: refactoring
     public String getDetailedEventHistory() {
-        StringBuilder sb = new StringBuilder();
         if (hasOnlyNoneEvent()) {
-            return sb.append(Event.NONE.getName())
-                    .append(LINE_FEED)
-                    .toString();
+            return Event.NONE.getName() + LINE_FEED;
         }
 
-        checkedEvents.forEach((event, count) -> {
-            int discountAmount = getDiscountAmount(event, count);
+        return createEventHistory();
+    }
 
-            sb.append(event.getName())
-                    .append(DELIMITER)
-                    .append(CurrencyUtil.formatToKor(discountAmount))
-                    .append(LINE_FEED);
-        });
+    private String createEventHistory() {
+        return checkedEvents.entrySet()
+                .stream()
+                .map(this::getStringHistory)
+                .collect(Collectors.joining());
+    }
 
-        return sb.toString();
+    private StringBuilder getStringHistory(Entry<Event, Integer> entry) {
+        Event event = entry.getKey();
+        int count = entry.getValue();
+        String amount = CurrencyUtil.formatToKor(getDiscountAmount(event, count));
+
+        return new StringBuilder()
+                .append(event.getName())
+                .append(DELIMITER)
+                .append(amount)
+                .append(LINE_FEED);
     }
 
     public int getTotalBenefitAmount() {
