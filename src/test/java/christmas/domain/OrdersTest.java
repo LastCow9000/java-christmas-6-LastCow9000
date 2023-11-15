@@ -128,4 +128,23 @@ class OrdersTest {
         // then
         assertThat(countOfDessert).isEqualTo(8);
     }
+
+    @DisplayName("메인 메뉴의 개수를 반환해야 한다.")
+    @Test
+    void getCountOfMainTest() {
+        // given
+        Orders newOrders = new Orders(
+                List.of(
+                        Order.of("티본스테이크", 3),
+                        Order.of("제로콜라", 2),
+                        Order.of("크리스마스파스타", 1),
+                        Order.of("해산물파스타", 2)
+                ));
+
+        // when
+        int countOfMain = newOrders.getCountOfMain();
+
+        // then
+        assertThat(countOfMain).isEqualTo(6);
+    }
 }

@@ -71,5 +71,30 @@ class OrderTest {
         assertThat(countPerDessert).isZero();
     }
 
+    @DisplayName("메인 메뉴이면 개수를 반환해야 한다.")
+    @Test
+    void getCountPerMainTest() {
+        // given
+        int count = 3;
+        Order order = Order.of("티본스테이크", count);
 
+        // when
+        int countPerMain = order.getCountPerMain();
+
+        // then
+        assertThat(countPerMain).isEqualTo(count);
+    }
+
+    @DisplayName("메인 메뉴가 아니면 0을 반환해야 한다.")
+    @Test
+    void getCountPerMainFailTest() {
+        // given
+        Order order = Order.of("아이스크림", 5);
+
+        // when
+        int countPerMain = order.getCountPerMain();
+
+        // then
+        assertThat(countPerMain).isZero();
+    }
 }
