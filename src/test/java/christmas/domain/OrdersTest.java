@@ -110,4 +110,22 @@ class OrdersTest {
         assertThat(totalPrice).isEqualTo(144_000);
     }
 
+    @DisplayName("디저트의 개수를 반환해야 한다.")
+    @Test
+    void getCountOfDessertTest() {
+        // given
+        Orders newOrders = new Orders(
+                List.of(
+                        Order.of("티본스테이크", 2),
+                        Order.of("제로콜라", 2),
+                        Order.of("초코케이크", 3),
+                        Order.of("아이스크림", 5)
+                ));
+
+        // when
+        int countOfDessert = newOrders.getCountOfDessert();
+
+        // then
+        assertThat(countOfDessert).isEqualTo(8);
+    }
 }

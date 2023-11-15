@@ -43,4 +43,33 @@ class OrderTest {
         // then
         assertThat(totalPrice).isEqualTo(550_000);
     }
+
+    @DisplayName("디저트 메뉴이면 개수를 반환해야 한다.")
+    @Test
+    void getCountPerDessertTest() {
+        // given
+        int count = 5;
+        Order order = Order.of("초코케이크", count);
+
+        // when
+        int countPerDessert = order.getCountPerDessert();
+
+        // then
+        assertThat(countPerDessert).isEqualTo(count);
+    }
+
+    @DisplayName("디저트 메뉴가 아니면 0을 반환해야 한다.")
+    @Test
+    void getCountPerDessertFailTest() {
+        // given
+        Order order = Order.of("티본스테이크", 5);
+
+        // when
+        int countPerDessert = order.getCountPerDessert();
+
+        // then
+        assertThat(countPerDessert).isZero();
+    }
+
+
 }
