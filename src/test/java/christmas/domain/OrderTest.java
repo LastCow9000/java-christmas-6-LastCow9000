@@ -97,4 +97,17 @@ class OrderTest {
         // then
         assertThat(countPerMain).isZero();
     }
+
+    @DisplayName("메뉴와 개수를 문자열로 반환해야 한다.")
+    @Test
+    void getStringMenuAndCountTest() {
+        // given
+        Order order = Order.of("바비큐립", 4);
+
+        // when
+        String menuAndCount = order.getStringMenuAndCount();
+
+        // then
+        assertThat(menuAndCount).contains("바비큐립 4개");
+    }
 }

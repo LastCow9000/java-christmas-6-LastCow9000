@@ -147,4 +147,25 @@ class OrdersTest {
         // then
         assertThat(countOfMain).isEqualTo(6);
     }
+
+    @DisplayName("메뉴와 개수를 문자열로 반환해야 한다.")
+    @Test
+    void getStringOrdersTest() {
+        // given
+        Orders newOrders = new Orders(
+                List.of(
+                        Order.of("티본스테이크", 3),
+                        Order.of("제로콜라", 2),
+                        Order.of("크리스마스파스타", 1)
+                ));
+
+        // when
+        String stringOfOrders = newOrders.getStringOrders();
+
+        // then
+        assertThat(stringOfOrders)
+                .contains("티본스테이크 3개")
+                .contains("제로콜라 2개")
+                .contains("크리스마스파스타 1개");
+    }
 }
