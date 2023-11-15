@@ -17,10 +17,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Discount {
-    private static final int THRESHOLD = 10_000;
+    private static final int DISCOUNT_THRESHOLD = 10_000;
     private static final int MINUS_BASE = -1;
     private static final String DELIMITER = ": ";
-    
+
     private final List<DiscountStrategy> strategies;
     private final Date date;
     private DiscountStrategy discountStrategy;
@@ -35,7 +35,7 @@ public class Discount {
 
     //@todo: refactoring
     public void checkEvent(Orders orders) {
-        if (isBelowThreshold(orders)) {
+        if (isBelowAmountForDiscount(orders)) {
             setCheckedEvents(Map.of(Event.NONE, BASE_COUNT));
             return;
         }
@@ -115,14 +115,15 @@ public class Discount {
         return checkedEvents.containsKey(event);
     }
 
-    private boolean isBelowThreshold(Orders orders) {
-        return orders.calculateTotalBeforeDiscount() < THRESHOLD;
+    private boolean isBelowAmountForDiscount(Orders orders) {
+        return orders.calculateTotalBeforeDiscount() < DISCOUNT_THRESHOLD;
     }
 
     private boolean hasOnlyNoneEvent() {
-        return checkedEvents.size() == 1 && checkedEvents.entrySet()
-                .stream()
-                .anyMatch(entry -> entry.getKey().equals(Event.NONE));
+        return checkedEvents.size() == 1 &&
+                checkedEvents.entrySet()
+                        .stream()
+                        .anyMatch(entry -> entry.getKey().equals(Event.NONE));
     }
 
     private int getDiscountAmount(Event event, Integer count) {
