@@ -99,9 +99,9 @@ public class Orders {
     }
 
     private OrderParam splitByNameAndCount(String order) {
-        String[] NameAndCount = order.split(DELIMITER);
+        String[] nameAndCount = order.split(DELIMITER);
 
-        return new OrderParam(NameAndCount[0], toInt(NameAndCount[1]));
+        return new OrderParam(nameAndCount[0], toInt(nameAndCount[1]));
     }
 
     private int toInt(String number) {
