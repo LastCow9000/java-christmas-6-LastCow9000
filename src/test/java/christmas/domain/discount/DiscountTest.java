@@ -251,6 +251,50 @@ class DiscountTest {
         // then
         assertThat(totalDiscountAmount).isEqualTo(-10469);
     }
+
+    @DisplayName("증정 메뉴가 존재하면 문자열로 출력해야 한다.")
+    @Test
+    void getStringGiftMenuTest() {
+        // given
+        Date date = Date.from(2);
+        Discount discount = new Discount(List.of(
+                new DDayStrategy(),
+                new GiftStrategy(),
+                new SpecialStrategy(),
+                new WeekdayStrategy(),
+                new WeekendStrategy()
+        ), date);
+        Orders orders = new Orders(List.of(Order.of("바비큐립", 10)));
+
+        // when
+        discount.checkEvent(orders);
+        String stringGiftMenu = discount.getStringGiftMenu();
+
+        // then
+        assertThat(stringGiftMenu).contains("샴페인 1개");
+    }
+
+    @DisplayName("증정 메뉴가 존재하지 않으면 '없음'을 출력해야 한다.")
+    @Test
+    void getStringGiftMenuFailTest() {
+        // given
+        Date date = Date.from(2);
+        Discount discount = new Discount(List.of(
+                new DDayStrategy(),
+                new GiftStrategy(),
+                new SpecialStrategy(),
+                new WeekdayStrategy(),
+                new WeekendStrategy()
+        ), date);
+        Orders orders = new Orders(List.of(Order.of("양송이수프", 2)));
+
+        // when
+        discount.checkEvent(orders);
+        String stringGiftMenu = discount.getStringGiftMenu();
+
+        // then
+        assertThat(stringGiftMenu).contains("없음");
+    }
 }
 
 record EventDto(int date, Orders orders, String... expected) {
