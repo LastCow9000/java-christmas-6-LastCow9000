@@ -12,6 +12,9 @@ public class InputView {
     private static final Pattern MENU_REG_EXP = Pattern.compile("^[가-힣]+-\\d+(,[가-힣]+-\\d+)*$");
     private static final String DELIMITER = ",";
 
+    private InputView() {
+    }
+
     public static int getDate() {
         print(INPUT_DATE);
 

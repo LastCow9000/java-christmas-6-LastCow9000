@@ -11,6 +11,9 @@ public class OutputView {
     private static final String DISCOUNTED_TOTAL = "<할인 후 예상 결제 금액>";
     private static final String EVENT_BADGE = "<12월 이벤트 배지>";
 
+    private OutputView() {
+    }
+
     public static void printGreeting() {
         print(GREETING);
     }
